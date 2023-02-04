@@ -9,8 +9,8 @@ type AppliedConditionalAccessPolicyable interface {
     i878a80d2330e89d26896388a3f487eef27b0a0e6c010c493bf80be1452208f91.AdditionalDataHolder
     i878a80d2330e89d26896388a3f487eef27b0a0e6c010c493bf80be1452208f91.Parsable
     GetAuthenticationStrength()(AuthenticationStrengthable)
-    GetConditionsNotSatisfied()(*ConditionalAccessConditions)
-    GetConditionsSatisfied()(*ConditionalAccessConditions)
+    GetConditionsNotSatisfied()([]*ConditionalAccessConditions)
+    GetConditionsSatisfied()([]*ConditionalAccessConditions)
     GetDisplayName()(*string)
     GetEnforcedGrantControls()([]string)
     GetEnforcedSessionControls()([]string)
@@ -21,8 +21,8 @@ type AppliedConditionalAccessPolicyable interface {
     GetResult()(*AppliedConditionalAccessPolicyResult)
     GetSessionControlsNotSatisfied()([]string)
     SetAuthenticationStrength(value AuthenticationStrengthable)()
-    SetConditionsNotSatisfied(value *ConditionalAccessConditions)()
-    SetConditionsSatisfied(value *ConditionalAccessConditions)()
+    SetConditionsNotSatisfied(value []*ConditionalAccessConditions)()
+    SetConditionsSatisfied(value []*ConditionalAccessConditions)()
     SetDisplayName(value *string)()
     SetEnforcedGrantControls(value []string)()
     SetEnforcedSessionControls(value []string)()

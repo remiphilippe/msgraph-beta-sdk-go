@@ -11,9 +11,9 @@ type AppliedConditionalAccessPolicy struct {
     // The custom authentication strength enforced in a Conditional Access policy.
     authenticationStrength AuthenticationStrengthable
     // Refers to the conditional access policy conditions that are not satisfied. The possible values are: none, application, users, devicePlatform, location, clientType, signInRisk, userRisk, time, deviceState, client,ipAddressSeenByAzureAD,ipAddressSeenByResourceProvider,unknownFutureValue,servicePrincipals,servicePrincipalRisk. Note that you must use the Prefer: include-unknown-enum-members request header to get the following values in this evolvable enum: servicePrincipals,servicePrincipalRisk.
-    conditionsNotSatisfied *ConditionalAccessConditions
+    conditionsNotSatisfied []*ConditionalAccessConditions
     // Refers to the conditional access policy conditions that are satisfied. The possible values are: none, application, users, devicePlatform, location, clientType, signInRisk, userRisk, time, deviceState, client,ipAddressSeenByAzureAD,ipAddressSeenByResourceProvider,unknownFutureValue,servicePrincipals,servicePrincipalRisk. Note that you must use the Prefer: include-unknown-enum-members request header to get the following values in this evolvable enum: servicePrincipals,servicePrincipalRisk.
-    conditionsSatisfied *ConditionalAccessConditions
+    conditionsSatisfied []*ConditionalAccessConditions
     // Name of the conditional access policy.
     displayName *string
     // Refers to the grant controls enforced by the conditional access policy (example: 'Require multi-factor authentication').
@@ -53,11 +53,11 @@ func (m *AppliedConditionalAccessPolicy) GetAuthenticationStrength()(Authenticat
     return m.authenticationStrength
 }
 // GetConditionsNotSatisfied gets the conditionsNotSatisfied property value. Refers to the conditional access policy conditions that are not satisfied. The possible values are: none, application, users, devicePlatform, location, clientType, signInRisk, userRisk, time, deviceState, client,ipAddressSeenByAzureAD,ipAddressSeenByResourceProvider,unknownFutureValue,servicePrincipals,servicePrincipalRisk. Note that you must use the Prefer: include-unknown-enum-members request header to get the following values in this evolvable enum: servicePrincipals,servicePrincipalRisk.
-func (m *AppliedConditionalAccessPolicy) GetConditionsNotSatisfied()(*ConditionalAccessConditions) {
+func (m *AppliedConditionalAccessPolicy) GetConditionsNotSatisfied()([]*ConditionalAccessConditions) {
     return m.conditionsNotSatisfied
 }
 // GetConditionsSatisfied gets the conditionsSatisfied property value. Refers to the conditional access policy conditions that are satisfied. The possible values are: none, application, users, devicePlatform, location, clientType, signInRisk, userRisk, time, deviceState, client,ipAddressSeenByAzureAD,ipAddressSeenByResourceProvider,unknownFutureValue,servicePrincipals,servicePrincipalRisk. Note that you must use the Prefer: include-unknown-enum-members request header to get the following values in this evolvable enum: servicePrincipals,servicePrincipalRisk.
-func (m *AppliedConditionalAccessPolicy) GetConditionsSatisfied()(*ConditionalAccessConditions) {
+func (m *AppliedConditionalAccessPolicy) GetConditionsSatisfied()([]*ConditionalAccessConditions) {
     return m.conditionsSatisfied
 }
 // GetDisplayName gets the displayName property value. Name of the conditional access policy.
@@ -95,7 +95,10 @@ func (m *AppliedConditionalAccessPolicy) GetFieldDeserializers()(map[string]func
             return err
         }
         if val != nil {
-            m.SetConditionsNotSatisfied(val.(*ConditionalAccessConditions))
+            switch v := val.(type) {
+            case []*ConditionalAccessConditions:
+                m.SetConditionsNotSatisfied(v)
+            }
         }
         return nil
     }
@@ -105,7 +108,10 @@ func (m *AppliedConditionalAccessPolicy) GetFieldDeserializers()(map[string]func
             return err
         }
         if val != nil {
-            m.SetConditionsSatisfied(val.(*ConditionalAccessConditions))
+            switch v := val.(type) {
+            case []*ConditionalAccessConditions:
+                m.SetConditionsNotSatisfied(v)
+            }
         }
         return nil
     }
@@ -250,17 +256,32 @@ func (m *AppliedConditionalAccessPolicy) Serialize(writer i878a80d2330e89d268963
         }
     }
     if m.GetConditionsNotSatisfied() != nil {
-        cast := (*m.GetConditionsNotSatisfied()).String()
-        err := writer.WriteStringValue("conditionsNotSatisfied", &cast)
-        if err != nil {
-            return err
+        arr := m.GetConditionsNotSatisfied()
+        if len(arr) > 0 {
+            var resp string
+            for _, a := range arr {
+                resp += a.String() + ","
+            }
+
+            // cast := (*m.GetConditionsNotSatisfied()).String()
+            err := writer.WriteStringValue("conditionsNotSatisfied", &resp)
+            if err != nil {
+                return err
+            }
         }
     }
     if m.GetConditionsSatisfied() != nil {
-        cast := (*m.GetConditionsSatisfied()).String()
-        err := writer.WriteStringValue("conditionsSatisfied", &cast)
-        if err != nil {
-            return err
+        arr := m.GetConditionsNotSatisfied()
+        if len(arr) > 0 {
+            var resp string
+            for _, a := range arr {
+                resp += a.String() + ","
+            }
+            // cast := (*m.GetConditionsSatisfied()).String()
+            err := writer.WriteStringValue("conditionsSatisfied", &resp)
+            if err != nil {
+                return err
+            }
         }
     }
     {
@@ -343,11 +364,11 @@ func (m *AppliedConditionalAccessPolicy) SetAuthenticationStrength(value Authent
     m.authenticationStrength = value
 }
 // SetConditionsNotSatisfied sets the conditionsNotSatisfied property value. Refers to the conditional access policy conditions that are not satisfied. The possible values are: none, application, users, devicePlatform, location, clientType, signInRisk, userRisk, time, deviceState, client,ipAddressSeenByAzureAD,ipAddressSeenByResourceProvider,unknownFutureValue,servicePrincipals,servicePrincipalRisk. Note that you must use the Prefer: include-unknown-enum-members request header to get the following values in this evolvable enum: servicePrincipals,servicePrincipalRisk.
-func (m *AppliedConditionalAccessPolicy) SetConditionsNotSatisfied(value *ConditionalAccessConditions)() {
+func (m *AppliedConditionalAccessPolicy) SetConditionsNotSatisfied(value []*ConditionalAccessConditions)() {
     m.conditionsNotSatisfied = value
 }
 // SetConditionsSatisfied sets the conditionsSatisfied property value. Refers to the conditional access policy conditions that are satisfied. The possible values are: none, application, users, devicePlatform, location, clientType, signInRisk, userRisk, time, deviceState, client,ipAddressSeenByAzureAD,ipAddressSeenByResourceProvider,unknownFutureValue,servicePrincipals,servicePrincipalRisk. Note that you must use the Prefer: include-unknown-enum-members request header to get the following values in this evolvable enum: servicePrincipals,servicePrincipalRisk.
-func (m *AppliedConditionalAccessPolicy) SetConditionsSatisfied(value *ConditionalAccessConditions)() {
+func (m *AppliedConditionalAccessPolicy) SetConditionsSatisfied(value []*ConditionalAccessConditions)() {
     m.conditionsSatisfied = value
 }
 // SetDisplayName sets the displayName property value. Name of the conditional access policy.
