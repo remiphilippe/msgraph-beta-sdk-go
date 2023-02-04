@@ -29,47 +29,53 @@ func (i ConditionalAccessConditions) String() string {
     return []string{"none", "application", "users", "devicePlatform", "location", "clientType", "signInRisk", "userRisk", "time", "deviceState", "client", "ipAddressSeenByAzureAD", "ipAddressSeenByResourceProvider", "unknownFutureValue", "servicePrincipals", "servicePrincipalRisk"}[i]
 }
 func ParseConditionalAccessConditions(v string) (any, error) {
-    result := NONE_CONDITIONALACCESSCONDITIONS
+    var result []*ConditionalAccessConditions
     spl := strings.Split(v, ",")
     for _, s := range spl {
+        var val ConditionalAccessConditions
         switch s {
             case "none":
-                result = NONE_CONDITIONALACCESSCONDITIONS
+                val = NONE_CONDITIONALACCESSCONDITIONS
             case "application":
-                result = APPLICATION_CONDITIONALACCESSCONDITIONS
+                val = APPLICATION_CONDITIONALACCESSCONDITIONS
             case "users":
-                result = USERS_CONDITIONALACCESSCONDITIONS
+                val = USERS_CONDITIONALACCESSCONDITIONS
             case "devicePlatform":
-                result = DEVICEPLATFORM_CONDITIONALACCESSCONDITIONS
+                val = DEVICEPLATFORM_CONDITIONALACCESSCONDITIONS
             case "location":
-                result = LOCATION_CONDITIONALACCESSCONDITIONS
+                val = LOCATION_CONDITIONALACCESSCONDITIONS
             case "clientType":
-                result = CLIENTTYPE_CONDITIONALACCESSCONDITIONS
+                val = CLIENTTYPE_CONDITIONALACCESSCONDITIONS
             case "signInRisk":
-                result = SIGNINRISK_CONDITIONALACCESSCONDITIONS
+                val = SIGNINRISK_CONDITIONALACCESSCONDITIONS
             case "userRisk":
-                result = USERRISK_CONDITIONALACCESSCONDITIONS
+                val = USERRISK_CONDITIONALACCESSCONDITIONS
             case "time":
-                result = TIME_CONDITIONALACCESSCONDITIONS
+                val = TIME_CONDITIONALACCESSCONDITIONS
             case "deviceState":
-                result = DEVICESTATE_CONDITIONALACCESSCONDITIONS
+                val = DEVICESTATE_CONDITIONALACCESSCONDITIONS
             case "client":
-                result = CLIENT_CONDITIONALACCESSCONDITIONS
+                val = CLIENT_CONDITIONALACCESSCONDITIONS
             case "ipAddressSeenByAzureAD":
-                result = IPADDRESSSEENBYAZUREAD_CONDITIONALACCESSCONDITIONS
+                val = IPADDRESSSEENBYAZUREAD_CONDITIONALACCESSCONDITIONS
             case "ipAddressSeenByResourceProvider":
-                result = IPADDRESSSEENBYRESOURCEPROVIDER_CONDITIONALACCESSCONDITIONS
+                val = IPADDRESSSEENBYRESOURCEPROVIDER_CONDITIONALACCESSCONDITIONS
             case "unknownFutureValue":
-                result = UNKNOWNFUTUREVALUE_CONDITIONALACCESSCONDITIONS
+                val = UNKNOWNFUTUREVALUE_CONDITIONALACCESSCONDITIONS
             case "servicePrincipals":
-                result = SERVICEPRINCIPALS_CONDITIONALACCESSCONDITIONS
+                val = SERVICEPRINCIPALS_CONDITIONALACCESSCONDITIONS
             case "servicePrincipalRisk":
-                result = SERVICEPRINCIPALRISK_CONDITIONALACCESSCONDITIONS
+                val = SERVICEPRINCIPALRISK_CONDITIONALACCESSCONDITIONS
             default:
-                return 0, errors.New("Unknown ConditionalAccessConditions value: " + s)
+                return result, errors.New("Unknown ConditionalAccessConditions value: " + s)
         }
+        result = append(result, &val)
     }
-    return &result, nil
+    if len(result) == 0 {
+        val := NONE_CONDITIONALACCESSCONDITIONS
+        result = append(result, &val)
+    }
+    return result, nil
 }
 func SerializeConditionalAccessConditions(values []ConditionalAccessConditions) []string {
     result := make([]string, len(values))
